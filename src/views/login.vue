@@ -26,12 +26,6 @@ export default {
 
 <style lang="less">
 .login {
-    .van-nav-bar {
-        background-color: #3296fa;
-        .van-nav-bar__title {
-            color: #fff
-        }
-    }
     .van-button--primary {
         background-color: #ededed;
         border-color: #ededed;
