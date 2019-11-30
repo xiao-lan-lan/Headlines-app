@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+import { login } from '@/api/user'
 export default {
   name: 'Login-Page',
   data () {
@@ -47,11 +47,7 @@ export default {
       })
 
       try {
-        const data = await request({
-          url: '/app/v1_0/authorizations',
-          method: 'POST',
-          data: this.user
-        })
+        const data = await login(this.user)
         console.log(data)
         this.$toast.success('登录成功')
       } catch (error) {
