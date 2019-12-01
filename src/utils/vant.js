@@ -8,7 +8,8 @@ import {
   CellGroup,
   Field,
   Icon,
-  Toast
+  Toast,
+  Tag
 } from 'vant'
 
 Vue
@@ -19,3 +20,4 @@ Vue
   .use(Field)
   .use(Icon)
   .use(Toast)
+  .use(Tag)

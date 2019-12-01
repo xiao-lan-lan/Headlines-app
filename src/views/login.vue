@@ -4,17 +4,36 @@
     <van-nav-bar title="登录" />
 
     <!-- 表单 -->
-    <van-cell-group>
-      <van-field v-model="user.mobile" clearable left-icon="contact" placeholder="请输入手机号" />
-      <van-field v-model="user.code" center clearable placeholder="请输入验证码" left-icon="closed-eye">
-        <van-button slot="button" size="small" type="primary" round>获取验证码</van-button>
-      </van-field>
-    </van-cell-group>
+    <ValidationObserver v-slot="{ invalid }" ref="loginForm">
+      <van-cell-group>
+        <!-- 手机号 -->
+        <ValidationProvider rules="required|phone" v-slot="{ errors }" name="手机号">
+          <van-field v-model="user.mobile" clearable left-icon="contact" placeholder="请输入手机号" />
+          <!-- <span>{{ errors[0] }}</span> -->
+          <van-tag mark type="danger" v-show=" errors[0] ">{{ errors[0] }}</van-tag>
+        </ValidationProvider>
 
-    <!-- 登录按钮 -->
-    <div class="button">
-      <van-button type="info" @click="onLogin">登录</van-button>
-    </div>
+        <!-- 验证码 -->
+        <ValidationProvider rules="required|max:6" v-slot="{ errors }" name="验证码">
+          <van-field
+            v-model="user.code"
+            center
+            clearable
+            placeholder="请输入验证码"
+            left-icon="closed-eye"
+          >
+            <van-button slot="button" size="small" type="primary" round>获取验证码</van-button>
+          </van-field>
+          <!-- <span>{{ errors[0] }}</span> -->
+          <van-tag mark type="danger" v-show=" errors[0] ">{{ errors[0] }}</van-tag>
+        </ValidationProvider>
+      </van-cell-group>
+
+      <!-- 登录按钮 -->
+      <div class="button">
+        <van-button type="info" @click="onLogin" :disabled="invalid">登录</van-button>
+      </div>
+    </ValidationObserver>
   </div>
 </template>
 
@@ -32,13 +51,18 @@ export default {
   },
   methods: {
     async onLogin () {
-    //   request({
-    //     url: '/app/v1_0/authorizations',
-    //     method: 'POST',
-    //     data: this.user
-    //   }).then(res => {
-    //     console.log(res.data)
-    //   })
+      const res = await this.$refs.loginForm.validate()
+      if (!res) {
+        return
+      }
+
+      //   request({
+      //     url: '/app/v1_0/authorizations',
+      //     method: 'POST',
+      //     data: this.user
+      //   }).then(res => {
+      //     console.log(res.data)
+      //   })
 
       this.$toast.loading({
         message: '登录中...',
@@ -58,7 +82,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .login {
   .van-button--primary {
     background-color: #ededed;
