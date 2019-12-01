@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    TokenObj: getItem()
+    TokenObj: getItem('token')
   },
   mutations: {
     changeTokenObj (state, token) {
