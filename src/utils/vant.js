@@ -11,7 +11,10 @@ import {
   Toast,
   Tag,
   Tabbar,
-  TabbarItem
+  TabbarItem,
+  Tab,
+  Tabs,
+  List
 } from 'vant'
 
 Vue
@@ -25,3 +28,6 @@ Vue
   .use(Tag)
   .use(Tabbar)
   .use(TabbarItem)
+  .use(Tab)
+  .use(Tabs)
+  .use(List)
