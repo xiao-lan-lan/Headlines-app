@@ -19,7 +19,6 @@ request.defaults.transformResponse = [function (data) {
 // Add a request interceptor
 request.interceptors.request.use(function (config) {
   // Do something before request is sent
-  console.log(config)
   if (store.state.TokenObj) {
     config.headers.Authorization = `Bearer ${store.state.TokenObj.token}`
   }
