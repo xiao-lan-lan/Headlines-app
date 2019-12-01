@@ -1,32 +1,41 @@
 <template>
   <div class="home">
     <!-- 顶部导航 -->
-    <van-nav-bar title="主页" class="nav"/>
+    <van-nav-bar title="主页" class="nav" />
 
     <!-- 频道标签 -->
-    <van-tabs>
-      <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">内容 {{ index }}</van-tab>
+    <van-tabs v-model="active">
+      <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
+        <!-- 文章列表 -->
+        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <van-cell v-for="item in list" :key="item" :title="item" />
+        </van-list>
+      </van-tab>
     </van-tabs>
-
-    <!-- 文章列表 -->
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <van-cell v-for="item in list" :key="item" :title="item" />
-    </van-list>
-
   </div>
 </template>
 
 <script>
+import { getChannels } from '@/api/user'
 export default {
   name: 'HomePage',
   data () {
     return {
+      active: 0,
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      channels: []
     }
   },
   methods: {
+    // 获取频道列表
+    async loadChannels () {
+      const res = await getChannels()
+      console.log(res)
+      this.channels = res.data.data.channels
+    },
+
     onLoad () {
       // 异步更新数据
       setTimeout(() => {
@@ -42,6 +51,9 @@ export default {
         }
       }, 500)
     }
+  },
+  created () {
+    this.loadChannels()
   }
 }
 </script>
