@@ -75,6 +75,7 @@ export default {
         console.log(res)
         this.$store.commit('changeTokenObj', res.data.data)
         this.$toast.success('登录成功')
+        this.$router.push('/')
       } catch (error) {
         this.$toast.fail('登录失败')
       }

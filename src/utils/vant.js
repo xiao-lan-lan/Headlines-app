@@ -9,7 +9,9 @@ import {
   Field,
   Icon,
   Toast,
-  Tag
+  Tag,
+  Tabbar,
+  TabbarItem
 } from 'vant'
 
 Vue
@@ -21,3 +23,5 @@ Vue
   .use(Icon)
   .use(Toast)
   .use(Tag)
+  .use(Tabbar)
+  .use(TabbarItem)
