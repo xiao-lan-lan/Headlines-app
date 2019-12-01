@@ -71,8 +71,9 @@ export default {
       })
 
       try {
-        const data = await login(this.user)
-        console.log(data)
+        const res = await login(this.user)
+        console.log(res)
+        this.$store.commit('changeTokenObj', res.data.data)
         this.$toast.success('登录成功')
       } catch (error) {
         this.$toast.fail('登录失败')
