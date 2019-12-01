@@ -21,7 +21,6 @@ request.interceptors.request.use(function (config) {
   // Do something before request is sent
   console.log(config)
   if (store.state.TokenObj) {
-    console.log(111)
     config.headers.Authorization = `Bearer ${store.state.TokenObj.token}`
   }
   return config

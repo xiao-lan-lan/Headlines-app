@@ -6,7 +6,7 @@ import Login from '@/views/login/login'
 import Layout from '@/views/layout'
 
 // 二级路由组件
-import Home from '@/views/home'
+import Home from '@/views/home/home'
 import QA from '@/views/QA'
 import Video from '@/views/videos'
 import User from '@/views/user'
