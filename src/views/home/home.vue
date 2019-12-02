@@ -14,11 +14,36 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-cell
+            <!-- <van-cell
               v-for="article in channel.articles"
               :key="article.art_id.toString()"
               :title="article.title"
-            />
+            />-->
+
+            <van-grid :column-num="1">
+              <van-grid-item
+                v-for="article in channel.articles"
+                :key="article.art_id.toString()"
+                :text="article.title"
+              >
+                <p style="margin:0">{{article.title}}</p>
+                <van-image
+                  width="80px"
+                  height="80px"
+                  fit="contain"
+                  :src="img"
+                  v-for="(img,index) in article.cover.images"
+                  :key="index"
+                  lazy-load
+                />
+                <div class="tag">
+                  <van-tag style="margin-right:10px" mark type="danger" v-if="article.is_top">置顶</van-tag>
+                  <van-tag style="margin-right:10px" plain type="primary">{{article.aut_name}}</van-tag>
+                  <van-tag style="margin-right:10px" plain type="success">{{article.comm_count}}评论</van-tag>
+                  <van-tag style="margin-right:10px" plain type="warning">{{article.pubdate}}</van-tag>
+                </div>
+              </van-grid-item>
+            </van-grid>
           </van-list>
         </van-pull-refresh>
       </van-tab>
