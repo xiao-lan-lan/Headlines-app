@@ -7,18 +7,20 @@
     <van-tabs v-model="active">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
-        <van-list
-          v-model="loading"
-          :finished="channel.finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <van-cell
-            v-for="article in channel.articles"
-            :key="article.art_id.toString()"
-            :title="article.title"
-          />
-        </van-list>
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="channel.finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell
+              v-for="article in channel.articles"
+              :key="article.art_id.toString()"
+              :title="article.title"
+            />
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -33,7 +35,8 @@ export default {
     return {
       active: 0,
       loading: false,
-      channels: []
+      channels: [],
+      isLoading: false
     }
   },
   methods: {
@@ -49,6 +52,7 @@ export default {
       })
     },
 
+    // 上拉加载更多文章列表
     async onLoad () {
       // 1.请求加载数据
       // 2.将数据添加到列表中
@@ -57,41 +61,51 @@ export default {
 
       // 当前频道
       const currentChannel = this.channels[this.active]
+
+      // 请求文章列表
       const res = await getArticles({
         channel_id: currentChannel.id,
         timestamp: Date.now(),
         with_top: 1
       })
       console.log(res.data)
+
+      // 追加文章列表
       currentChannel.articles.push(...res.data.data.results)
+
+      // 结束加载
       this.loading = false
 
+      // 判断是否还有数据，即后端返回数据是否还有上一次时间戳pre_timestamp
       if (res.data.data.pre_timestamp) {
         currentChannel.timestamp = res.data.data.pre_timestamp
       } else {
         currentChannel.finished = true
       }
+    },
+
+    // 下拉刷新文章列表
+    async onRefresh () {
+      // 当前频道
+      const currentChannel = this.channels[this.active]
+
+      // 请求文章列表
+      const res = await getArticles({
+        channel_id: currentChannel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+      console.log(res.data)
+
+      // 追加到当前频道的文章列表中
+      currentChannel.articles.unshift(...res.data.data.results)
+
+      // 提示刷新成功
+      this.$toast('刷新成功')
+
+      // 结束刷新
+      this.isLoading = false
     }
-
-    // onLoad () {
-    //   // 当前频道文章
-    //   console.log(this.channels[this.active])
-    //   const currentArticles = this.channels[this.active].articles
-
-    //   // 异步更新数据
-    //   setTimeout(() => {
-    //     for (let i = 0; i < 10; i++) {
-    //       currentArticles.push(currentArticles.length + 1)
-    //     }
-    //     // 加载状态结束
-    //     this.loading = false
-
-    //     // 数据全部加载完成
-    //     if (currentArticles.length >= 40) {
-    //       this.channels[this.active].finished = true
-    //     }
-    //   }, 500)
-    // }
   },
   created () {
     this.loadChannels()

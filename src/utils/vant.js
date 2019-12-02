@@ -14,7 +14,8 @@ import {
   TabbarItem,
   Tab,
   Tabs,
-  List
+  List,
+  PullRefresh
 } from 'vant'
 
 Vue
@@ -31,3 +32,4 @@ Vue
   .use(Tab)
   .use(Tabs)
   .use(List)
+  .use(PullRefresh)
