@@ -6,7 +6,8 @@ import Login from '@/views/login/login'
 import Layout from '@/views/layout'
 
 // 二级路由组件
-import Home from '@/views/home/home'
+// import Home from '@/views/home/home'
+import Home2 from '@/views/home/home2'
 import QA from '@/views/QA'
 import Video from '@/views/videos'
 import User from '@/views/user'
@@ -27,7 +28,7 @@ const routes = [
       {
         // 主页
         path: '',
-        component: Home
+        component: Home2
       },
       {
         // 问答
