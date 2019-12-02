@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <!-- 顶部导航 -->
-    <van-nav-bar title="主页" class="nav" />
+    <van-nav-bar title="主页" class="nav" fixed/>
 
     <!-- 频道标签 -->
-    <van-tabs v-model="active">
+    <van-tabs v-model="active" color="#3296fa" title-active-color="#3296fa">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -20,14 +20,16 @@
               :title="article.title"
             />-->
 
-            <van-grid :column-num="1">
+            <van-grid :column-num="1" :center="false">
               <van-grid-item
                 v-for="article in channel.articles"
                 :key="article.art_id.toString()"
                 :text="article.title"
+                class="articleItem"
               >
-                <p style="margin:0">{{article.title}}</p>
-                <van-image
+                <p style="margin:0;font-size:18px">{{article.title}}</p>
+                <div class="img">
+                  <van-image
                   width="80px"
                   height="80px"
                   fit="contain"
@@ -35,12 +37,18 @@
                   v-for="(img,index) in article.cover.images"
                   :key="index"
                   lazy-load
+                  style="margin-right:10px"
                 />
+                </div>
                 <div class="tag">
                   <van-tag style="margin-right:10px" mark type="danger" v-if="article.is_top">置顶</van-tag>
                   <van-tag style="margin-right:10px" plain type="primary">{{article.aut_name}}</van-tag>
                   <van-tag style="margin-right:10px" plain type="success">{{article.comm_count}}评论</van-tag>
-                  <van-tag style="margin-right:10px" plain type="warning">{{article.pubdate}}</van-tag>
+                  <van-tag
+                    style="margin-right:10px"
+                    plain
+                    type="warning"
+                  >{{article.pubdate}}</van-tag>
                 </div>
               </van-grid-item>
             </van-grid>
@@ -138,5 +146,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.home {
+  .van-tabs /deep/ .van-tabs__wrap {
+    position: fixed;
+    top: 46px;
+    width: 100%;
+    z-index: 2;
+  }
+  .van-tabs /deep/ .van-tabs__content {
+   margin-top: 90px;
+  }
+}
 </style>
