@@ -76,6 +76,7 @@
       :style="{ height: '90%' }"
       closeable
       close-icon-position="top-left"
+      @open="onChannelOpen"
     >
       <van-cell-group style="margin-top:50px">
         <!-- 我的频道 -->
@@ -83,11 +84,14 @@
           <van-button plain type="danger" hairline round size="mini">编辑</van-button>
         </van-cell>
         <van-grid :gutter="10">
-            <van-grid-item v-for="channel in UserChannels" :key="channel.id" :text="channel.name" />
-          </van-grid>
+          <van-grid-item v-for="channel in UserChannels" :key="channel.id" :text="channel.name" />
+        </van-grid>
 
         <!-- 推荐频道 -->
-        <van-cell title="推荐频道" value="内容" label="描述信息" />
+        <van-cell title="推荐频道"/>
+        <van-grid :gutter="10">
+          <van-grid-item v-for="channel in CommendChannels" :key="channel.id" :text="channel.name" />
+        </van-grid>
       </van-cell-group>
     </van-popup>
   </div>
@@ -96,6 +100,7 @@
 <script>
 import { getChannels } from '@/api/user'
 import { getArticles } from '@/api/articles'
+import { getAllChannels } from '@/api/channels'
 import moment from 'moment'
 import '@/utils/data.js'
 
@@ -109,6 +114,8 @@ export default {
       active: 0, // 激活的标签页
       loading: false, // 上拉加载
       UserChannels: [], // 用户频道
+      // CommendChannels: [], // 推荐频道
+      AllChannels: [], // 全部频道
       isLoading: false, // 上拉刷新加载
       isChannelShow: false // 频道弹出层
     }
@@ -182,10 +189,31 @@ export default {
 
       // 结束刷新
       this.isLoading = false
+    },
+
+    // 频道列表打开,获取全部频道
+    async onChannelOpen () {
+      const res = await getAllChannels()
+      console.log(res.data)
+      this.AllChannels = res.data.data.channels
     }
   },
   created () {
     this.loadUserChannels()
+  },
+  computed: {
+    CommendChannels () {
+      const arr = []
+      this.AllChannels.forEach(allchannel => {
+        const res = this.UserChannels.find(userchannel => {
+          return userchannel.id === allchannel.id
+        })
+        if (!res) {
+          arr.push(allchannel)
+        }
+      })
+      return arr
+    }
   },
   filters: {
     dataFormat: function (value) {
