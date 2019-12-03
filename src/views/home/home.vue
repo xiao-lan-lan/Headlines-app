@@ -2,7 +2,7 @@
   <div class="home">
     <!-- 顶部导航 -->
     <van-nav-bar title="主页" class="nav" fixed>
-      <van-button round type="info" slot="title">搜索</van-button>
+      <van-button round type="info" slot="title" @click="$router.push('/search')">搜索</van-button>
     </van-nav-bar>
 
     <!-- 频道标签 -->

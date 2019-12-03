@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 // 一级组件
 import Login from '@/views/login/login'
 import Layout from '@/views/layout'
+import Search from '@/views/search/search'
 
 // 二级路由组件
 import Home from '@/views/home/home'
@@ -18,6 +19,11 @@ const routes = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    // 搜索
+    path: '/search',
+    component: Search
   },
   {
     path: '',
