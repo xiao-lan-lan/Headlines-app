@@ -95,6 +95,7 @@
             v-for="(channel,index) in UserChannels"
             :key="channel.id"
             :text="channel.name"
+            @click="onCheckoutChannel(index)"
           >
             <van-icon
               name="close"
@@ -235,6 +236,25 @@ export default {
     onPushUserChannel (channel) {
       console.log(channel)
       this.UserChannels.push((channel))
+    },
+
+    // 用户频道非编辑状态,点击切换频道
+    onCheckoutChannel (index) {
+      // 如果是编辑状态,不执行
+      if (this.isEdit) {
+        return
+      }
+      console.log(index)
+
+      // 非编辑状态,点击关闭弹出层
+      this.isChannelShow = false
+
+      // 切换标签
+      this.active = index
+
+      // 重新刷新,请求加载
+      this.isLoading = true
+      this.onRefresh()
     }
   },
   created () {
