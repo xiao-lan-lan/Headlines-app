@@ -48,7 +48,7 @@
                     style="margin-right:10px"
                     plain
                     type="warning"
-                  >{{article.pubdate | relativeTime}}</van-tag>
+                  >{{article.pubdate | dataFormat}}</van-tag>
                 </div>
               </van-grid-item>
             </van-grid>
@@ -64,6 +64,10 @@ import { getChannels } from '@/api/user'
 import { getArticles } from '@/api/articles'
 import moment from 'moment'
 import '@/utils/data.js'
+
+// 相对时间中文
+moment.locale('zh-cn')
+
 export default {
   name: 'HomePage',
   data () {
@@ -147,10 +151,11 @@ export default {
   },
   filters: {
     dataFormat: function (value) {
-      let myTime = moment(value).format('YYYY-MM-DD')
-      let nowtTime = moment(moment(new Date()).format('YYYY-MM-DD'))
-      console.log(nowtTime.diff(myTime, 'day'))
-      return nowtTime.diff(myTime, 'day') + '小时前'
+      // let myTime = moment(value).format('YYYY-MM-DD')
+      // let nowtTime = moment(moment(new Date()).format('YYYY-MM-DD'))
+      // console.log(nowtTime.diff(myTime, 'day'))
+      // return nowtTime.diff(myTime, 'day')
+      return moment(value).fromNow()
     }
   }
 }
