@@ -130,6 +130,7 @@ import { getArticles } from '@/api/articles'
 import { getAllChannels } from '@/api/channels'
 import moment from 'moment'
 import '@/utils/data.js'
+import { setItem, getItem } from '@/utils/localStorage'
 
 // 相对时间中文
 moment.locale('zh-cn')
@@ -151,14 +152,15 @@ export default {
   methods: {
     // 获取频道列表
     async loadUserChannels () {
-      const res = await getChannels()
-      console.log(res.data)
-      this.UserChannels = res.data.data.channels
-      this.UserChannels.forEach(item => {
-        item.articles = []
-        item.finished = false
-        item.timestamp = ''
-      })
+      if (getItem('userChannel')) {
+        this.UserChannels = getItem('userChannel')
+        this.extendChannels()
+      } else {
+        const res = await getChannels()
+        console.log(res.data)
+        this.UserChannels = res.data.data.channels
+        this.extendChannels()
+      }
     },
 
     // 上拉加载更多文章列表
@@ -255,6 +257,15 @@ export default {
       // 重新刷新,请求加载
       this.isLoading = true
       this.onRefresh()
+    },
+
+    // 扩展频道数据
+    extendChannels () {
+      this.UserChannels.forEach(item => {
+        item.articles = []
+        item.finished = false
+        item.timestamp = ''
+      })
     }
   },
   created () {
@@ -272,6 +283,12 @@ export default {
         }
       })
       return arr
+    }
+  },
+  watch: {
+    UserChannels (newval, oldval) {
+      console.log(newval)
+      setItem('userChannel', newval)
     }
   },
   filters: {
