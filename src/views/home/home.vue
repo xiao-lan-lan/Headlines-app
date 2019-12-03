@@ -81,18 +81,42 @@
       <van-cell-group style="margin-top:50px">
         <!-- 我的频道 -->
         <van-cell title="我的频道" value="内容">
-          <van-button plain type="danger" hairline round size="mini" @click="isEdit=!isEdit">{{isEdit?'完成':'编辑'}}</van-button>
+          <van-button
+            plain
+            type="danger"
+            hairline
+            round
+            size="mini"
+            @click="isEdit=!isEdit"
+          >{{isEdit?'完成':'编辑'}}</van-button>
         </van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="(channel,index) in UserChannels" :key="channel.id" :text="channel.name">
-            <van-icon name="close" slot="icon" size="18px" v-show="isEdit" @click="onDelUserchannel(index)"/>
+          <van-grid-item
+            v-for="(channel,index) in UserChannels"
+            :key="channel.id"
+            :text="channel.name"
+          >
+            <van-icon
+              name="close"
+              slot="icon"
+              size="18px"
+              v-show="isEdit"
+              @click="onDelUserchannel(index)"
+            />
           </van-grid-item>
         </van-grid>
 
         <!-- 推荐频道 -->
         <van-cell title="推荐频道" />
         <van-grid :gutter="10">
-          <van-grid-item v-for="channel in CommendChannels" :key="channel.id" :text="channel.name" />
+          <van-grid-item
+            v-for="channel in CommendChannels"
+            :key="channel.id"
+            :text="channel.name"
+            @click="onPushUserChannel(channel)"
+          >
+            <van-icon name="add-o" slot="icon" size="18px" />
+          </van-grid-item>
         </van-grid>
       </van-cell-group>
     </van-popup>
@@ -205,6 +229,12 @@ export default {
     onDelUserchannel (index) {
       console.log(index)
       this.UserChannels.splice(index, 1)
+    },
+
+    // 增加推荐频道,去用户频道
+    onPushUserChannel (channel) {
+      console.log(channel)
+      this.UserChannels.push((channel))
     }
   },
   created () {
@@ -258,7 +288,7 @@ export default {
     position: absolute;
     top: -16px;
     right: -8px;
-    z-index: 2
+    z-index: 2;
   }
 }
 </style>
