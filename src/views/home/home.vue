@@ -5,7 +5,10 @@
 
     <!-- 频道标签 -->
     <van-tabs v-model="active" color="#3296fa" title-active-color="#3296fa">
+      <!-- 右侧面包按钮 -->
       <van-icon name="wap-nav" slot="nav-right" size="30px" @click="isChannelShow=true" />
+
+      <!-- 频道标签列表 -->
       <van-tab v-for="channel in UserChannels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -22,13 +25,18 @@
             />-->
 
             <van-grid :column-num="1" :center="false">
+              <!-- 每一个文章 -->
+
               <van-grid-item
                 v-for="article in channel.articles"
                 :key="article.art_id.toString()"
                 :text="article.title"
                 class="articleItem"
               >
+                <!-- 文章标题 -->
                 <p style="margin:0;font-size:18px">{{article.title}}</p>
+
+                <!-- 文章图片 -->
                 <div class="img">
                   <van-image
                     width="80px"
@@ -41,6 +49,8 @@
                     style="margin-right:10px"
                   />
                 </div>
+
+                <!-- 文章评论等 -->
                 <div class="tag">
                   <van-tag style="margin-right:10px" mark type="danger" v-if="article.is_top">置顶</van-tag>
                   <van-tag style="margin-right:10px" plain type="primary">{{article.aut_name}}</van-tag>
@@ -66,7 +76,20 @@
       :style="{ height: '90%' }"
       closeable
       close-icon-position="top-left"
-    />
+    >
+      <van-cell-group style="margin-top:50px">
+        <!-- 我的频道 -->
+        <van-cell title="我的频道" value="内容">
+          <van-button plain type="danger" hairline round size="mini">编辑</van-button>
+        </van-cell>
+        <van-grid :gutter="10">
+            <van-grid-item v-for="channel in UserChannels" :key="channel.id" :text="channel.name" />
+          </van-grid>
+
+        <!-- 推荐频道 -->
+        <van-cell title="推荐频道" value="内容" label="描述信息" />
+      </van-cell-group>
+    </van-popup>
   </div>
 </template>
 
