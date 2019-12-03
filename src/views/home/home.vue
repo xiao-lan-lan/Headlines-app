@@ -73,7 +73,7 @@
       v-model="isChannelShow"
       round
       position="bottom"
-      :style="{ height: '90%' }"
+      :style="{ height: '95%' }"
       closeable
       close-icon-position="top-left"
       @open="onChannelOpen"
@@ -81,14 +81,16 @@
       <van-cell-group style="margin-top:50px">
         <!-- 我的频道 -->
         <van-cell title="我的频道" value="内容">
-          <van-button plain type="danger" hairline round size="mini">编辑</van-button>
+          <van-button plain type="danger" hairline round size="mini" @click="isEdit=!isEdit">{{isEdit?'完成':'编辑'}}</van-button>
         </van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="channel in UserChannels" :key="channel.id" :text="channel.name" />
+          <van-grid-item v-for="(channel,index) in UserChannels" :key="channel.id" :text="channel.name">
+            <van-icon name="close" slot="icon" size="18px" v-show="isEdit" @click="onDelUserchannel(index)"/>
+          </van-grid-item>
         </van-grid>
 
         <!-- 推荐频道 -->
-        <van-cell title="推荐频道"/>
+        <van-cell title="推荐频道" />
         <van-grid :gutter="10">
           <van-grid-item v-for="channel in CommendChannels" :key="channel.id" :text="channel.name" />
         </van-grid>
@@ -117,7 +119,8 @@ export default {
       // CommendChannels: [], // 推荐频道
       AllChannels: [], // 全部频道
       isLoading: false, // 上拉刷新加载
-      isChannelShow: false // 频道弹出层
+      isChannelShow: false, // 频道弹出层
+      isEdit: false // 编辑状态,显示删除图标
     }
   },
   methods: {
@@ -196,6 +199,12 @@ export default {
       const res = await getAllChannels()
       console.log(res.data)
       this.AllChannels = res.data.data.channels
+    },
+
+    // 删除用户频道,去推荐频道
+    onDelUserchannel (index) {
+      console.log(index)
+      this.UserChannels.splice(index, 1)
     }
   },
   created () {
@@ -238,12 +247,18 @@ export default {
   .van-tabs /deep/ .van-tabs__content {
     margin-top: 90px;
   }
-  .van-icon {
+  .van-icon-wap-nav {
     position: fixed;
     line-height: 46px;
     right: 0;
     opacity: 0.8;
     background-color: #fff;
+  }
+  /deep/ .van-grid-item__icon-wrapper {
+    position: absolute;
+    top: -16px;
+    right: -8px;
+    z-index: 2
   }
 }
 </style>
