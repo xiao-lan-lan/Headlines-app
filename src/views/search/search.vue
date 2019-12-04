@@ -9,11 +9,12 @@
       background="#3296fa"
       @input="onInput"
     >
+      <van-icon name="arrow-left" slot="left-icon" @click="$router.back()"/>
       <span slot="action" @click="onSearch(value)">搜索</span>
     </van-search>
 
     <!-- 联想 -->
-    <van-cell-group>
+    <van-cell-group v-show="value">
       <van-cell
         icon="search"
         v-for="suggestion in suggestions"
@@ -25,7 +26,7 @@
     </van-cell-group>
 
     <!-- 搜索历史 -->
-    <van-cell-group>
+    <van-cell-group v-show="!value">
       <van-cell title="历史记录">
         <div v-show="isDelete">
           <van-tag round type="warning" style="margin-right:10px" @click="onDeleteAll">全部删除</van-tag>
@@ -41,7 +42,7 @@
           @click="isDelete=true"
         />
       </van-cell>
-      <van-cell :title="history" v-for="(history,index) in histories" :key="index">
+      <van-cell :title="history" v-for="(history,index) in histories" :key="index" @click="onSearch(history)">
         <!-- 单个删除按钮 -->
         <van-icon
           slot="right-icon"
