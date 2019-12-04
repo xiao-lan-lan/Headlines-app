@@ -22,15 +22,15 @@ export default {
     return {
       SearchResults: [],
       loading: false,
-      finished: false
+      finished: false,
+      page: 1
     }
   },
   methods: {
     async onLoad () {
-      let page = 1
       // 1.异步请求
       const res = await getSearchResults({
-        page: page,
+        page: this.page,
         per_page: 15,
         q: this.$route.params.q
       })
@@ -43,10 +43,10 @@ export default {
       this.loading = false
 
       // 4.数据加载全部完成
-      if (res.data.data.results.length < 15) {
+      if (res.data.data.results.length < 14) {
         this.finished = true
       } else {
-        page++
+        this.page++
       }
     }
   }

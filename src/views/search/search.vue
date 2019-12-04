@@ -17,12 +17,13 @@
     <!-- 联想 -->
     <van-cell-group>
       <van-cell
-        :title="suggestion"
         icon="search"
         v-for="suggestion in suggestions"
         :key="suggestion"
         @click="$router.push(`/search/${suggestion}`)"
-      />
+      >
+        <span slot="title" v-html="HigthLigth(suggestion)">{{suggestion}}</span>
+      </van-cell>
     </van-cell-group>
 
     <!-- 搜索历史 -->
@@ -47,7 +48,8 @@ export default {
   data () {
     return {
       value: '', // 搜索关键词
-      suggestions: []
+      suggestions: [],
+      str: "<span style='color:red'>哈哈</span>"
     }
   },
   methods: {
@@ -59,6 +61,13 @@ export default {
       const res = await getSuggestion(this.value.trim())
       console.log(res.data)
       this.suggestions = res.data.data.options
+    },
+
+    // 高亮关键词
+    HigthLigth (suggestion) {
+      console.log(suggestion)
+      const reg = new RegExp(this.value, 'gi')
+      return suggestion.replace(reg, `<span style='color:red'>${this.value}</span>`)
     },
 
     // 搜索
