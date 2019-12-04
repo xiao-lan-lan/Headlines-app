@@ -2,7 +2,7 @@
   <div class="home">
     <!-- 顶部导航 -->
     <van-nav-bar title="主页" class="nav" fixed>
-      <van-button round type="info" slot="title" @click="$router.push('/search')">搜索</van-button>
+      <van-button round type="info" slot="title" size="small" @click="$router.push('/search')">搜索</van-button>
     </van-nav-bar>
 
     <!-- 频道标签 -->
@@ -103,7 +103,7 @@
               name="close"
               slot="icon"
               size="18px"
-              v-show="isEdit"
+              v-show="isEdit && channel.name !== '推荐'"
               @click="onDelUserchannel(index)"
             />
           </van-grid-item>
@@ -148,8 +148,7 @@ export default {
       AllChannels: [], // 全部频道
       isLoading: false, // 上拉刷新加载
       isChannelShow: false, // 频道弹出层
-      isEdit: false, // 编辑状态,显示删除图标
-      value: '' // 搜索关键词
+      isEdit: false // 编辑状态,显示删除图标
     }
   },
   methods: {
@@ -269,13 +268,8 @@ export default {
         item.finished = false
         item.timestamp = ''
       })
-    },
+    }
 
-    // 搜索
-    onSearch () {},
-
-    // 取消搜索
-    onCancel () {}
   },
   created () {
     this.loadUserChannels()
@@ -314,8 +308,9 @@ export default {
 
 <style lang="less" scoped>
 .home {
-  .van-button--normal {
-    padding: 0 90px;
+  .van-button--small {
+    // padding: 0 90px;
+    width: 100%;
     background-color: rgba(255, 255, 255, 0.4);
   }
   .van-tabs /deep/ .van-tabs__wrap {
