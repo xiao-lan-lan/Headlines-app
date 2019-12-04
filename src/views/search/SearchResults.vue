@@ -1,16 +1,21 @@
 <template>
   <div class="box">
     <!-- 顶部导航标题 -->
-    <van-nav-bar title="xxx的搜索结果" left-arrow @click-left="$router.back()" />
+    <van-nav-bar :title="$route.params.q+'的搜索结果'" left-arrow @click-left="$router.back()" />
 
     <!-- 搜索结果列表 -->
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <van-cell v-for="SearchResult in SearchResults" :key="SearchResult" :title="SearchResult" />
+      <van-cell
+        v-for="SearchResult in SearchResults"
+        :key="SearchResult.art_id"
+        :title="SearchResult.title"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
+import { getSearchResults } from '@/api/search'
 export default {
   name: 'SearchResults',
   data () {
@@ -21,20 +26,28 @@ export default {
     }
   },
   methods: {
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.SearchResults.push(this.SearchResults.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
+    async onLoad () {
+      let page = 1
+      // 1.异步请求
+      const res = await getSearchResults({
+        page: page,
+        per_page: 15,
+        q: this.$route.params.q
+      })
+      console.log(res.data)
 
-        // 数据全部加载完成
-        if (this.SearchResults.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+      // 2.追加数据
+      this.SearchResults.push(...res.data.data.results)
+
+      // 3.加载状态结束
+      this.loading = false
+
+      // 4.数据加载全部完成
+      if (res.data.data.results.length < 15) {
+        this.finished = true
+      } else {
+        page++
+      }
     }
   }
 }

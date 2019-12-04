@@ -10,3 +10,12 @@ export function getSuggestion (q) {
     }
   })
 }
+
+// 获取搜索结果
+export function getSearchResults (data) {
+  return request({
+    url: '/app/v1_0/search',
+    method: 'GET',
+    params: data
+  })
+}
