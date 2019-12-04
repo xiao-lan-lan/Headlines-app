@@ -34,6 +34,7 @@
                 :key="article.art_id.toString()"
                 :text="article.title"
                 class="articleItem"
+                @click="$router.push('/article/'+article.art_id.toString())"
               >
                 <!-- 文章标题 -->
                 <p style="margin:0;font-size:18px">{{article.title}}</p>

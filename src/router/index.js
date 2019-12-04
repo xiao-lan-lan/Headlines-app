@@ -6,6 +6,7 @@ import Login from '@/views/login/login'
 import Layout from '@/views/layout'
 import Search from '@/views/search/search'
 import SearchResults from '@/views/search/SearchResults'
+import Article from '@/views/article/article'
 
 // 二级路由组件
 import Home from '@/views/home/home'
@@ -30,6 +31,11 @@ const routes = [
     // 搜索结果
     path: '/search/:q',
     component: SearchResults
+  },
+  {
+    // 文章详情
+    path: '/article/:id',
+    component: Article
   },
   {
     path: '',
