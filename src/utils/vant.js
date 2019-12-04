@@ -22,7 +22,8 @@ import {
   Lazyload,
   Popup,
   Search,
-  Notify
+  Notify,
+  Dialog
 } from 'vant'
 
 Vue
@@ -47,3 +48,4 @@ Vue
   .use(Popup)
   .use(Search)
   .use(Notify)
+  .use(Dialog)

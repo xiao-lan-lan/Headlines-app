@@ -27,10 +27,29 @@
     <!-- 搜索历史 -->
     <van-cell-group>
       <van-cell title="历史记录">
-        <van-icon slot="right-icon" name="delete" style="line-height: inherit;" color="red" />
+        <div v-show="isDelete">
+          <van-tag round type="warning" style="margin-right:10px" @click="onDeleteAll">全部删除</van-tag>
+          <van-tag round type="danger" style="margin-right:10px" @click="isDelete=false">完成</van-tag>
+        </div>
+        <!-- 总删除按钮 -->
+        <van-icon
+          slot="right-icon"
+          name="delete"
+          style="line-height: inherit;"
+          color="red"
+          v-show="!isDelete"
+          @click="isDelete=true"
+        />
       </van-cell>
       <van-cell :title="history" v-for="(history,index) in histories" :key="index">
-        <van-icon slot="right-icon" name="delete" style="line-height: inherit;" />
+        <!-- 单个删除按钮 -->
+        <van-icon
+          slot="right-icon"
+          name="delete"
+          style="line-height: inherit;"
+          v-show="isDelete"
+          @click="onDeleteOne(index)"
+        />
       </van-cell>
     </van-cell-group>
   </div>
@@ -45,7 +64,8 @@ export default {
     return {
       value: '', // 搜索关键词
       suggestions: [], // 联想建议
-      histories: getItem('history') || []// 历史记录
+      histories: getItem('history') || [], // 历史记录
+      isDelete: false
     }
   },
   methods: {
@@ -63,14 +83,17 @@ export default {
     HigthLigth (suggestion) {
       console.log(suggestion)
       const reg = new RegExp(this.value, 'gi')
-      return suggestion.replace(reg, `<span style='color:red'>${this.value}</span>`)
+      return suggestion.replace(
+        reg,
+        `<span style='color:red'>${this.value}</span>`
+      )
     },
 
     // 携带参数,路由跳转
     onSearch (data) {
       // 非空
       if (!data.trim()) {
-        this.$notify('请输入搜索内容')
+        this.$toast('请输入搜索内容')
         return
       }
       // 判断历史记录中是否包含此次搜索关键词,有-去除掉原来的，没有-正常添加
@@ -84,6 +107,23 @@ export default {
       setItem('history', this.histories)
       // 路由跳转
       this.$router.push(`/search/${data}`)
+    },
+
+    // 删除全部历史记录
+    onDeleteAll () {
+      this.histories = []
+      this.$notify({ type: 'success', message: '已删除全部历史记录' })
+    },
+
+    // 删除某个历史记录
+    onDeleteOne (index) {
+      this.histories.splice(index, 1)
+      this.$notify({ type: 'success', message: '已删除本条历史记录' })
+    }
+  },
+  watch: {
+    histories (newval) {
+      setItem('history', newval)
     }
   }
 }
