@@ -9,14 +9,12 @@
       background="#3296fa"
       @search="onSearch"
       @cancel="onCancel"
+      @input="onInput"
     />
 
      <!-- 联想 -->
     <van-cell-group>
-      <van-cell title="单元格" icon="search" />
-      <van-cell title="单元格" icon="search" />
-      <van-cell title="单元格" icon="search" />
-      <van-cell title="单元格" icon="search" />
+      <van-cell :title="suggestion" icon="search" v-for="suggestion in suggestions" :key="suggestion"/>
     </van-cell-group>
 
     <!-- 搜索历史 -->
@@ -36,13 +34,27 @@
 </template>
 
 <script>
+import { getSuggestion } from '@/api/search'
 export default {
+  name: 'SearchPage',
   data () {
     return {
-      value: '' // 搜索关键词
+      value: '', // 搜索关键词
+      suggestions: []
     }
   },
   methods: {
+
+    // 获取联想词
+    async onInput () {
+      if (!this.value) {
+        return
+      }
+      const res = await getSuggestion(this.value.trim())
+      console.log(res.data)
+      this.suggestions = res.data.data.options
+    },
+
     // 搜索
     onSearch () {},
 
