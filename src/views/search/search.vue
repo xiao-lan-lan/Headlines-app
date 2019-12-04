@@ -7,11 +7,9 @@
       shape="round"
       show-action
       background="#3296fa"
-      @search="onSearch"
-      @cancel="onCancel"
       @input="onInput"
     >
-      <span slot="action" @click="$router.push(`/search/${value}`)">搜索</span>
+      <span slot="action" @click="onSearch(value)">搜索</span>
     </van-search>
 
     <!-- 联想 -->
@@ -20,7 +18,7 @@
         icon="search"
         v-for="suggestion in suggestions"
         :key="suggestion"
-        @click="$router.push(`/search/${suggestion}`)"
+        @click="onSearch(suggestion)"
       >
         <span slot="title" v-html="HigthLigth(suggestion)">{{suggestion}}</span>
       </van-cell>
@@ -31,10 +29,7 @@
       <van-cell title="历史记录">
         <van-icon slot="right-icon" name="delete" style="line-height: inherit;" color="red" />
       </van-cell>
-      <van-cell title="单元格">
-        <van-icon slot="right-icon" name="delete" style="line-height: inherit;" />
-      </van-cell>
-      <van-cell title="单元格">
+      <van-cell :title="history" v-for="(history,index) in histories" :key="index">
         <van-icon slot="right-icon" name="delete" style="line-height: inherit;" />
       </van-cell>
     </van-cell-group>
@@ -43,13 +38,14 @@
 
 <script>
 import { getSuggestion } from '@/api/search'
+import { setItem, getItem } from '@/utils/localStorage'
 export default {
   name: 'SearchPage',
   data () {
     return {
       value: '', // 搜索关键词
-      suggestions: [],
-      str: "<span style='color:red'>哈哈</span>"
+      suggestions: [], // 联想建议
+      histories: getItem('history') || []// 历史记录
     }
   },
   methods: {
@@ -70,11 +66,25 @@ export default {
       return suggestion.replace(reg, `<span style='color:red'>${this.value}</span>`)
     },
 
-    // 搜索
-    onSearch () {},
-
-    // 取消搜索
-    onCancel () {}
+    // 携带参数,路由跳转
+    onSearch (data) {
+      // 非空
+      if (!data.trim()) {
+        this.$notify('请输入搜索内容')
+        return
+      }
+      // 判断历史记录中是否包含此次搜索关键词,有-去除掉原来的，没有-正常添加
+      const index = this.histories.indexOf(data)
+      if (index !== -1) {
+        this.histories.splice(index, 1)
+      }
+      // 添加到历史记录
+      this.histories.unshift(data)
+      // 存储历史记录
+      setItem('history', this.histories)
+      // 路由跳转
+      this.$router.push(`/search/${data}`)
+    }
   }
 }
 </script>

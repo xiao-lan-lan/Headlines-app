@@ -21,7 +21,8 @@ import {
   Image,
   Lazyload,
   Popup,
-  Search
+  Search,
+  Notify
 } from 'vant'
 
 Vue
@@ -45,3 +46,4 @@ Vue
   .use(Lazyload)
   .use(Popup)
   .use(Search)
+  .use(Notify)
