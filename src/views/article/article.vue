@@ -48,24 +48,63 @@
     <!-- 评论 -->
     <div class="comment" v-for="comment in comments" :key="comment.com_id.toString()">
       <div class="author">
-        <van-image
-          round
-          width="40px"
-          height="40px"
-          :src="comment.aut_photo"
-          lazy-load
-        />
+        <van-image round width="40px" height="40px" :src="comment.aut_photo" lazy-load />
         <div class="time">
           <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
           <span>{{comment.content}}</span>
           <span style="color:grey">
             {{comment.pubdata | relativeTime}}
-            <van-button type="default" style="margin-left:10px" size="mini">回复</van-button>
+            <van-button
+              type="default"
+              style="margin-left:10px"
+              size="mini"
+              @click="onComment(comment)"
+            >回复</van-button>
           </span>
         </div>
       </div>
       <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
     </div>
+
+    <!-- 评论回复 -->
+    <van-popup
+      v-model="isCommentShow"
+      round
+      position="bottom"
+      :style="{ height: '95%' }"
+      closeable
+      close-icon-position="top-left"
+    >
+      <!-- 顶部导航标题 -->
+      <van-nav-bar :title="totalComment+' 条回复'" />
+
+      <!-- 此条评论 -->
+      <div class="comment">
+        <div class="author">
+          <van-image round width="40px" height="40px" :src="currentcomment.aut_photo" lazy-load />
+          <div class="time">
+            <span style="font-weight:700;color:#466b9d">{{currentcomment.aut_name}}</span>
+            <span>{{currentcomment.content}}</span>
+            <span style="color:grey">{{currentcomment.pubdata | relativeTime}}</span>
+          </div>
+        </div>
+        <van-icon :name="currentcomment.is_liking?'like':'like-o'" size="14px" />
+      </div>
+
+      <van-divider />
+      <!-- 回复 -->
+      <div class="comment" v-for="(comment,index) in CommentReply" :key="index">
+        <div class="author">
+          <van-image round width="40px" height="40px" :src="comment.aut_photo" lazy-load />
+          <div class="time">
+            <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
+            <span>{{comment.content}}</span>
+            <span style="color:grey">{{comment.pubdata | relativeTime}}</span>
+          </div>
+        </div>
+        <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
+      </div>
+    </van-popup>
 
     <!-- 水平线 -->
     <van-divider />
@@ -92,7 +131,11 @@ export default {
     return {
       sms: '',
       article: {}, // 文章详情
-      comments: {} // 文章评论
+      comments: {}, // 文章评论
+      isCommentShow: false, // 评论弹窗
+      CommentReply: {}, // 评论回复
+      totalComment: 0, // 评论回复数
+      currentcomment: {}// 当前评论
     }
   },
   methods: {
@@ -104,18 +147,40 @@ export default {
     },
 
     // 获取文章评论
-    async loadComments () {
+    async loadArticleComments () {
       const res = await getComments({
         type: 'a',
         source: this.$route.params.id
       })
       console.log(res.data)
       this.comments = res.data.data.results
+    },
+
+    // 获取评论回复
+    async onComment (comment) {
+      // 弹出框
+      this.isCommentShow = true
+      console.log(comment)
+
+      // 当前评论
+      this.currentcomment = comment
+
+      // 评论回复请求
+      const res = await getComments({
+        type: 'c',
+        source: comment.com_id.toString()
+      })
+      console.log(res.data)
+
+      // 评论回复数组
+      this.CommentReply = res.data.data.results
+      // 总回复数
+      this.totalComment = res.data.data.total_count
     }
   },
   created () {
     this.loadArticlesDetail()
-    this.loadComments()
+    this.loadArticleComments()
   }
 }
 </script>
@@ -173,6 +238,11 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
+  }
+  /deep/ .van-popup {
+    .van-popup__close-icon {
+      color: #fff;
+    }
   }
 }
 </style>
