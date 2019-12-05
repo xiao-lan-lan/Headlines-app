@@ -104,6 +104,13 @@
         </div>
         <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
       </div>
+
+      <!-- 底部发表回复 -->
+      <van-cell-group>
+        <van-field v-model="commentReplyTetx" center clearable placeholder="请输入评论内容">
+          <van-button slot="button" size="small" type="info">发布</van-button>
+        </van-field>
+      </van-cell-group>
     </van-popup>
 
     <!-- 水平线 -->
@@ -114,8 +121,8 @@
 
     <!-- 底部发表评论 -->
     <van-cell-group>
-      <van-field v-model="sms" center clearable placeholder="请输入评论内容">
-        <van-button slot="button" size="small" type="info">发布</van-button>
+      <van-field v-model="commentText" center clearable placeholder="请输入评论内容">
+        <van-button slot="button" size="small" type="info" @click="onAddArticleComment">发布</van-button>
       </van-field>
     </van-cell-group>
   </div>
@@ -123,19 +130,20 @@
 
 <script>
 import { getArticleDetail } from '@/api/articles'
-import { getComments } from '@/api/comment'
+import { getComments, addComments } from '@/api/comment'
 import '@/utils/data'
 export default {
   name: 'ArticlePage',
   data () {
     return {
-      sms: '',
+      commentText: '', // 发布文章评论
+      commentReplyTetx: '', // 回复评论内容
       article: {}, // 文章详情
       comments: {}, // 文章评论
       isCommentShow: false, // 评论弹窗
       CommentReply: {}, // 评论回复
       totalComment: 0, // 评论回复数
-      currentcomment: {}// 当前评论
+      currentcomment: {} // 当前评论
     }
   },
   methods: {
@@ -176,6 +184,20 @@ export default {
       this.CommentReply = res.data.data.results
       // 总回复数
       this.totalComment = res.data.data.total_count
+    },
+
+    // 发表文章评论
+    async onAddArticleComment () {
+      const res = await addComments({
+        target: this.$route.params.id,
+        content: this.commentText
+      })
+      console.log(res)
+      if (res.status === 201) {
+        this.$toast({ type: 'success', message: '发布成功' })
+        this.loadArticleComments()
+        this.commentText = ''
+      }
     }
   },
   created () {
