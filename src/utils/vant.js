@@ -23,7 +23,10 @@ import {
   Popup,
   Search,
   Notify,
-  Dialog
+  Dialog,
+  Panel,
+  Skeleton,
+  Divider
 } from 'vant'
 
 Vue
@@ -49,3 +52,6 @@ Vue
   .use(Search)
   .use(Notify)
   .use(Dialog)
+  .use(Panel)
+  .use(Skeleton)
+  .use(Divider)
