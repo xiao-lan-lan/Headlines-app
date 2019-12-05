@@ -24,3 +24,11 @@ export function getUserData () {
     method: 'GET'
   })
 }
+
+// 获取用户信息
+export function getUserSelf () {
+  return request({
+    url: '/app/v1_0/user/profile',
+    method: 'GET'
+  })
+}
