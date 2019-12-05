@@ -53,7 +53,7 @@
           <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
           <span>{{comment.content}}</span>
           <span style="color:grey">
-            {{comment.pubdata | relativeTime}}
+            {{comment.pubdate | relativeTime}}
             <van-button
               type="default"
               style="margin-left:10px"
@@ -99,7 +99,7 @@
           <div class="time">
             <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
             <span>{{comment.content}}</span>
-            <span style="color:grey">{{comment.pubdata | relativeTime}}</span>
+            <span style="color:grey">{{comment.pubdate | relativeTime}}</span>
           </div>
         </div>
         <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
@@ -107,8 +107,8 @@
 
       <!-- 底部发表回复 -->
       <van-cell-group>
-        <van-field v-model="commentReplyTetx" center clearable placeholder="请输入评论内容">
-          <van-button slot="button" size="small" type="info">发布</van-button>
+        <van-field v-model="commentReplyText" center clearable placeholder="请输入评论内容">
+          <van-button slot="button" size="small" type="info" @click="onAddCommentReply(currentcomment.com_id.toString())">发布</van-button>
         </van-field>
       </van-cell-group>
     </van-popup>
@@ -119,7 +119,7 @@
       <span style="color:grey;font-size:14px;">没有更多了</span>
     </div>
 
-    <!-- 底部发表评论 -->
+    <!-- 底部发表文章评论 -->
     <van-cell-group>
       <van-field v-model="commentText" center clearable placeholder="请输入评论内容">
         <van-button slot="button" size="small" type="info" @click="onAddArticleComment">发布</van-button>
@@ -137,7 +137,7 @@ export default {
   data () {
     return {
       commentText: '', // 发布文章评论
-      commentReplyTetx: '', // 回复评论内容
+      commentReplyText: '', // 回复评论内容
       article: {}, // 文章详情
       comments: {}, // 文章评论
       isCommentShow: false, // 评论弹窗
@@ -197,6 +197,26 @@ export default {
         this.$toast({ type: 'success', message: '发布成功' })
         this.loadArticleComments()
         this.commentText = ''
+      } else {
+        this.$toast({ type: 'fail', message: '发布失败' })
+      }
+    },
+
+    // 发表评论回复
+    async onAddCommentReply (id) {
+      const res = await addComments({
+        target: id,
+        content: this.commentReplyText,
+        art_id: this.$route.params.id
+      })
+      console.log(res)
+      if (res.status === 201) {
+        if (res.status === 201) {
+          this.$toast({ type: 'success', message: '发布成功' })
+          this.commentReplyText = ''
+        } else {
+          this.$toast({ type: 'fail', message: '发布失败' })
+        }
       }
     }
   },
