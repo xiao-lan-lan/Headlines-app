@@ -7,6 +7,7 @@ import Layout from '@/views/layout'
 import Search from '@/views/search/search'
 import SearchResults from '@/views/search/SearchResults'
 import Article from '@/views/article/article'
+import UserEdit from '@/views/user/UserEdit'
 
 // 二级路由组件
 import Home from '@/views/home/home'
@@ -36,6 +37,11 @@ const routes = [
     // 文章详情
     path: '/article/:id',
     component: Article
+  },
+  {
+    // 用户信息修改
+    path: '/my',
+    component: UserEdit
   },
   {
     path: '',

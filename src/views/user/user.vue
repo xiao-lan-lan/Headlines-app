@@ -1,7 +1,7 @@
 <template>
-  <div class="user">
+  <div class="user" style="padding:10px">
     <!-- 用户名头像 -->
-    <van-cell :title="UserData.name" is-link style="margin-bottom:10px">
+    <van-cell :title="UserData.name" is-link style="margin-bottom:10px" @click="$router.push('/my')">
       <van-image
         width="50"
         height="50"
