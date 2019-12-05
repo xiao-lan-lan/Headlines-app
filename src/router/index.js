@@ -12,7 +12,7 @@ import Article from '@/views/article/article'
 import Home from '@/views/home/home'
 import QA from '@/views/QA'
 import Video from '@/views/videos'
-import User from '@/views/user'
+import User from '@/views/user/user'
 
 Vue.use(VueRouter)
 

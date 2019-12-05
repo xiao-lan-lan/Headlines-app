@@ -1,11 +1,11 @@
 <template>
   <div class="user">
     <!-- 用户名头像 -->
-    <van-cell title="单元格" is-link style="margin-bottom:10px">
+    <van-cell :title="UserData.name" is-link style="margin-bottom:10px">
       <van-image
         width="50"
         height="50"
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="UserData.photo"
         slot="icon"
         style="margin-right:15px"
       />
@@ -14,16 +14,16 @@
     <!-- 关注信息 -->
     <van-grid :border="false">
       <van-grid-item icon="photo-o" text="头条">
-        <span slot="icon">1</span>
+        <span slot="icon">{{UserData.art_count}}</span>
       </van-grid-item>
       <van-grid-item icon="photo-o" text="关注">
-        <span slot="icon">1</span>
+        <span slot="icon">{{UserData.follow_count}}</span>
       </van-grid-item>
       <van-grid-item icon="photo-o" text="粉丝">
-        <span slot="icon">1</span>
+        <span slot="icon">{{UserData.fans_count}}</span>
       </van-grid-item>
       <van-grid-item icon="photo-o" text="获赞">
-        <span slot="icon">1</span>
+        <span slot="icon">{{UserData.like_count}}</span>
       </van-grid-item>
     </van-grid>
 
@@ -46,7 +46,25 @@
 </template>
 
 <script>
-export default {}
+import { getUserData } from '@/api/user'
+export default {
+  name: 'UserPage',
+  data () {
+    return {
+      UserData: {}
+    }
+  },
+  methods: {
+    async loadUserData () {
+      const res = await getUserData()
+      console.log(res.data)
+      this.UserData = res.data.data
+    }
+  },
+  created () {
+    this.loadUserData()
+  }
+}
 </script>
 
 <style>

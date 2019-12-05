@@ -16,3 +16,11 @@ export function getChannels () {
     method: 'GET'
   })
 }
+
+// 获取用户相关数据
+export function getUserData () {
+  return request({
+    url: '/app/v1_0/user',
+    method: 'GET'
+  })
+}
