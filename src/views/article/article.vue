@@ -6,24 +6,25 @@
     <!-- 文章内容 -->
     <div class="article">
       <!-- 文章标题 -->
-      <h5>文章标题</h5>
+      <h5>{{article.title}}</h5>
       <div class="t">
         <div class="author">
           <van-image
             round
-            width="30px"
-            height="30px"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            width="80px"
+            height="80px"
+            :src="article.aut_photo"
             lazy-load
           />
           <div class="time">
-            <span style="font-weight:700">作者</span>
-            <span style="color:grey">发布时间</span>
+            <span style="font-weight:700">{{article.aut_name}}</span>
+            <span style="color:grey">{{article.pubdate | relativeTime}}</span>
           </div>
         </div>
-        <van-button type="info" icon="plus" size="small" round>关注</van-button>
+        <van-button type="info" icon="plus" size="small" round v-show="!article.is_followed">关注</van-button>
+        <van-button size="small" round plain v-show="article.is_followed" >已关注</van-button>
       </div>
-      <div class="m">文章详情内容</div>
+      <div class="m" v-html="article.content"></div>
       <div class="b">
         <van-button
           plain
@@ -33,8 +34,20 @@
           size="small"
           style="margin-right:20px"
           hairline
+          v-show="!article.is_collected"
         >+点赞</van-button>
-        <van-button plain type="danger" round icon="delete" size="small" hairline>不喜欢</van-button>
+        <van-button
+          plain
+          type="default"
+          round
+          size="small"
+          style="margin-right:20px"
+          hairline
+          v-show="article.is_collected"
+        >取消点赞</van-button>
+
+        <!-- <van-button plain type="primary" round icon="like-o" size="small" hairline >喜欢</van-button> -->
+        <van-button plain type="danger" round icon="delete" size="small" hairline >不喜欢</van-button>
       </div>
     </div>
 
@@ -43,8 +56,8 @@
       <div class="author">
         <van-image
           round
-          width="30px"
-          height="30px"
+          width="40px"
+          height="40px"
           src="https://img.yzcdn.cn/vant/cat.jpeg"
           lazy-load
         />
@@ -76,14 +89,28 @@
 </template>
 
 <script>
+import { getArticleDetail } from '@/api/articles'
+import '@/utils/data'
 export default {
   name: 'ArticlePage',
   data () {
     return {
-      sms: ''
+      sms: '',
+      article: {}// 文章详情
     }
   },
-  mounted () {}
+  methods: {
+
+    // 获取文章详情
+    async loadArticlesDetail () {
+      const res = await getArticleDetail(this.$route.params.id)
+      console.log(res.data)
+      this.article = res.data.data
+    }
+  },
+  created () {
+    this.loadArticlesDetail()
+  }
 }
 </script>
 
