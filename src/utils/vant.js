@@ -28,7 +28,8 @@ import {
   Skeleton,
   Divider,
   ActionSheet,
-  DatetimePicker
+  DatetimePicker,
+  Loading
 } from 'vant'
 
 Vue
@@ -59,3 +60,4 @@ Vue
   .use(Divider)
   .use(ActionSheet)
   .use(DatetimePicker)
+  .use(Loading)

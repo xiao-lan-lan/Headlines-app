@@ -3,8 +3,16 @@
     <!-- 顶部导航标题 -->
     <van-nav-bar title="文章详情" left-arrow @click-left="$router.back()" />
 
+    <!-- 加载转圈圈 -->
+    <van-loading
+      type="spinner"
+      color="#1989fa"
+      style="text-align:center;margin-top:15px"
+      v-if="articleloading"
+    />
+
     <!-- 文章内容 -->
-    <div class="article">
+    <div class="article" v-else-if="article.title">
       <!-- 文章标题 -->
       <h5>{{article.title}}</h5>
       <div class="t">
@@ -63,7 +71,7 @@
     </div>
 
     <!-- 评论 -->
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" >
       <div
         class="comment"
         slot="default"
@@ -154,9 +162,6 @@
 
     <!-- 水平线 -->
     <van-divider />
-    <div style="text-align:center">
-      <span style="color:grey;font-size:14px;">没有更多了</span>
-    </div>
 
     <!-- 底部发表文章评论 -->
     <van-cell-group>
@@ -195,9 +200,10 @@ export default {
       CommentReply: [], // 评论回复
       totalComment: 0, // 评论回复数
       currentcomment: {}, // 当前评论
-      loading: false, // 加载转圈
+      loading: false, // 评论列表加载转圈
       finished: false, // 加载完成
-      offset: null
+      offset: null, // 评论列表下一页
+      articleloading: true // 进入加载
     }
   },
   methods: {
@@ -206,6 +212,7 @@ export default {
       const res = await getArticleDetail(this.$route.params.id)
       console.log(res.data)
       this.article = res.data.data
+      this.articleloading = false
     },
 
     // 获取文章评论

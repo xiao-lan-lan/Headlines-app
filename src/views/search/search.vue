@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     // 获取联想词
+    // 防抖
     onInput: debounce(async function () {
       if (!this.value) {
         return
