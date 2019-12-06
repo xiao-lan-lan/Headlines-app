@@ -35,7 +35,8 @@
           size="small"
           style="margin-right:20px"
           hairline
-          v-show="!article.is_collected"
+          v-show="article.attitude===-1 || article.attitude===0"
+          @click="onLike"
         >+点赞</van-button>
         <van-button
           plain
@@ -44,11 +45,12 @@
           size="small"
           style="margin-right:20px"
           hairline
-          v-show="article.is_collected"
+          v-show="article.attitude===1"
+          @click="onLike"
         >取消点赞</van-button>
 
         <!-- <van-button plain type="primary" round icon="like-o" size="small" hairline >喜欢</van-button> -->
-        <van-button plain type="danger" round icon="delete" size="small" hairline>不喜欢</van-button>
+        <van-button plain type="danger" round icon="delete" size="small" hairline>{{article.attitude===0?'取消不喜欢':'不喜欢'}}</van-button>
       </div>
     </div>
 
@@ -148,7 +150,7 @@
 </template>
 
 <script>
-import { getArticleDetail } from '@/api/articles'
+import { getArticleDetail, addLike, deleteLike } from '@/api/articles'
 import { getComments, addComments } from '@/api/comment'
 import { followUser, unfollowUser } from '@/api/user'
 import '@/utils/data'
@@ -266,6 +268,22 @@ export default {
         console.log(res)
       }
       this.article.is_followed = !this.article.is_followed
+      this.$toast('操作成功')
+    },
+
+    // 点赞,取消点赞文章
+    async onLike () {
+      if (this.article.attitude === 1) {
+        // 点赞状态,请求取消点赞
+        const res = await deleteLike(this.$route.params.id)
+        console.log(res)
+        this.article.attitude = -1
+      } else {
+        // 无态度状态,请求点赞
+        const res = await addLike(this.$route.params.id)
+        console.log(res)
+        this.article.attitude = 1
+      }
       this.$toast('操作成功')
     }
   },
