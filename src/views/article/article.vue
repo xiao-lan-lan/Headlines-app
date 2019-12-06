@@ -50,7 +50,15 @@
         >取消点赞</van-button>
 
         <!-- <van-button plain type="primary" round icon="like-o" size="small" hairline >喜欢</van-button> -->
-        <van-button plain type="danger" round icon="delete" size="small" hairline>{{article.attitude===0?'取消不喜欢':'不喜欢'}}</van-button>
+        <van-button
+          plain
+          type="danger"
+          round
+          icon="delete"
+          size="small"
+          hairline
+          @click="onDislike"
+        >{{article.attitude===0?'取消不喜欢':'不喜欢'}}</van-button>
       </div>
     </div>
 
@@ -150,7 +158,13 @@
 </template>
 
 <script>
-import { getArticleDetail, addLike, deleteLike } from '@/api/articles'
+import {
+  getArticleDetail,
+  addLike,
+  deleteLike,
+  addDislike,
+  deleteDislike
+} from '@/api/articles'
 import { getComments, addComments } from '@/api/comment'
 import { followUser, unfollowUser } from '@/api/user'
 import '@/utils/data'
@@ -283,6 +297,22 @@ export default {
         const res = await addLike(this.$route.params.id)
         console.log(res)
         this.article.attitude = 1
+      }
+      this.$toast('操作成功')
+    },
+
+    // 不喜欢,取消不喜欢文章
+    async onDislike () {
+      if (this.article.attitude === 0) {
+        // 不喜欢状态,请求取消不喜欢
+        const res = await deleteDislike(this.$route.params.id)
+        console.log(res)
+        this.article.attitude = -1
+      } else {
+        // 无态度状态,请求不喜欢
+        const res = await addDislike(this.$route.params.id)
+        console.log(res)
+        this.article.attitude = 0
       }
       this.$toast('操作成功')
     }

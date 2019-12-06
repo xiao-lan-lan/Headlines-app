@@ -35,3 +35,22 @@ export function deleteLike (articleId) {
     method: 'DELETE'
   })
 }
+
+// 不喜欢文章
+export function addDislike (articleId) {
+  return request({
+    url: '/app/v1_0/article/dislikes',
+    method: 'POST',
+    data: {
+      target: articleId
+    }
+  })
+}
+
+// 取消不喜欢文章
+export function deleteDislike (articleId) {
+  return request({
+    url: `/app/v1_0/article/dislikes/${articleId}`,
+    method: 'DELETE'
+  })
+}
