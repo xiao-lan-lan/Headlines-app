@@ -32,3 +32,12 @@ export function getUserSelf () {
     method: 'GET'
   })
 }
+
+// 修改用户资料
+export function editUser (data) {
+  return request({
+    url: '/app/v1_0/user/profile',
+    method: 'PATCH',
+    data
+  })
+}

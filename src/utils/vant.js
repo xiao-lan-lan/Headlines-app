@@ -26,7 +26,9 @@ import {
   Dialog,
   Panel,
   Skeleton,
-  Divider
+  Divider,
+  ActionSheet,
+  DatetimePicker
 } from 'vant'
 
 Vue
@@ -55,3 +57,5 @@ Vue
   .use(Panel)
   .use(Skeleton)
   .use(Divider)
+  .use(ActionSheet)
+  .use(DatetimePicker)
