@@ -15,8 +15,15 @@
             <span style="color:grey">{{article.pubdate | relativeTime}}</span>
           </div>
         </div>
-        <van-button type="info" icon="plus" size="small" round v-show="!article.is_followed">关注</van-button>
-        <van-button size="small" round plain v-show="article.is_followed">已关注</van-button>
+        <van-button
+          type="info"
+          icon="plus"
+          size="small"
+          round
+          v-show="!article.is_followed"
+          @click="onFollow"
+        >关注</van-button>
+        <van-button size="small" round plain v-show="article.is_followed" @click="onFollow">取消关注</van-button>
       </div>
       <div class="m" v-html="article.content"></div>
       <div class="b">
@@ -47,7 +54,12 @@
 
     <!-- 评论 -->
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <div class="comment" slot="default" v-for="comment in comments" :key="comment.com_id.toString()">
+      <div
+        class="comment"
+        slot="default"
+        v-for="comment in comments"
+        :key="comment.com_id.toString()"
+      >
         <div class="author">
           <van-image round width="40px" height="40px" :src="comment.aut_photo" lazy-load />
           <div class="time">
@@ -138,6 +150,7 @@
 <script>
 import { getArticleDetail } from '@/api/articles'
 import { getComments, addComments } from '@/api/comment'
+import { followUser, unfollowUser } from '@/api/user'
 import '@/utils/data'
 export default {
   name: 'ArticlePage',
@@ -239,6 +252,21 @@ export default {
           this.$toast({ type: 'fail', message: '发布失败' })
         }
       }
+    },
+
+    // 关注,取消关注用户
+    async onFollow () {
+      // 已关注，请求取消关注
+      if (this.article.is_followed) {
+        const res = await unfollowUser(this.article.aut_id)
+        console.log(res)
+      } else {
+        // 未关注，请求关注
+        const res = await followUser(this.article.aut_id)
+        console.log(res)
+      }
+      this.article.is_followed = !this.article.is_followed
+      this.$toast('操作成功')
     }
   },
   created () {

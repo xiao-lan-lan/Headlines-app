@@ -41,3 +41,21 @@ export function editUser (data) {
     data
   })
 }
+
+// 关注用户
+export function followUser (userId) {
+  return request({
+    url: '/app/v1_0/user/followings',
+    method: 'POST',
+    data: {
+      target: userId
+    }
+  })
+}
+
+export function unfollowUser (userId) {
+  return request({
+    url: `/app/v1_0/user/followings/${userId}`,
+    method: 'DELETE'
+  })
+}
