@@ -46,25 +46,27 @@
     </div>
 
     <!-- 评论 -->
-    <div class="comment" v-for="comment in comments" :key="comment.com_id.toString()">
-      <div class="author">
-        <van-image round width="40px" height="40px" :src="comment.aut_photo" lazy-load />
-        <div class="time">
-          <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
-          <span>{{comment.content}}</span>
-          <span style="color:grey">
-            {{comment.pubdate | relativeTime}}
-            <van-button
-              type="default"
-              style="margin-left:10px"
-              size="mini"
-              @click="onComment(comment)"
-            >回复</van-button>
-          </span>
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+      <div class="comment" slot="default" v-for="comment in comments" :key="comment.com_id.toString()">
+        <div class="author">
+          <van-image round width="40px" height="40px" :src="comment.aut_photo" lazy-load />
+          <div class="time">
+            <span style="font-weight:700;color:#466b9d">{{comment.aut_name}}</span>
+            <span>{{comment.content}}</span>
+            <span style="color:grey">
+              {{comment.pubdate | relativeTime}}
+              <van-button
+                type="default"
+                style="margin-left:10px"
+                size="mini"
+                @click="onComment(comment)"
+              >回复</van-button>
+            </span>
+          </div>
         </div>
+        <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
       </div>
-      <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
-    </div>
+    </van-list>
 
     <!-- 评论回复 -->
     <van-popup
@@ -85,7 +87,7 @@
           <div class="time">
             <span style="font-weight:700;color:#466b9d">{{currentcomment.aut_name}}</span>
             <span>{{currentcomment.content}}</span>
-            <span style="color:grey">{{currentcomment.pubdata | relativeTime}}</span>
+            <span style="color:grey">{{currentcomment.pubdate | relativeTime}}</span>
           </div>
         </div>
         <van-icon :name="currentcomment.is_liking?'like':'like-o'" size="14px" />
@@ -108,7 +110,12 @@
       <!-- 底部发表回复 -->
       <van-cell-group>
         <van-field v-model="commentReplyText" center clearable placeholder="请输入评论内容">
-          <van-button slot="button" size="small" type="info" @click="onAddCommentReply(currentcomment.com_id.toString())">发布</van-button>
+          <van-button
+            slot="button"
+            size="small"
+            type="info"
+            @click="onAddCommentReply(currentcomment.com_id.toString())"
+          >发布</van-button>
         </van-field>
       </van-cell-group>
     </van-popup>
@@ -139,11 +146,14 @@ export default {
       commentText: '', // 发布文章评论
       commentReplyText: '', // 回复评论内容
       article: {}, // 文章详情
-      comments: {}, // 文章评论
+      comments: [], // 文章评论
       isCommentShow: false, // 评论弹窗
       CommentReply: {}, // 评论回复
       totalComment: 0, // 评论回复数
-      currentcomment: {} // 当前评论
+      currentcomment: {}, // 当前评论
+      loading: false, // 加载转圈
+      finished: false, // 加载完成
+      offset: null
     }
   },
   methods: {
@@ -155,13 +165,24 @@ export default {
     },
 
     // 获取文章评论
-    async loadArticleComments () {
+    async onLoad () {
+      // 1.异步请求
       const res = await getComments({
         type: 'a',
-        source: this.$route.params.id
+        source: this.$route.params.id,
+        offset: this.offset
       })
       console.log(res.data)
-      this.comments = res.data.data.results
+      // 2.数据追加到列表
+      this.comments.push(...res.data.data.results)
+      // 3.停止转圈圈
+      this.loading = false
+      // 4.结束加载判断
+      if (res.data.data.last_id) {
+        this.offset = res.data.data.last_id
+      } else {
+        this.finished = true
+      }
     },
 
     // 获取评论回复
@@ -222,7 +243,6 @@ export default {
   },
   created () {
     this.loadArticlesDetail()
-    this.loadArticleComments()
   }
 }
 </script>
