@@ -59,6 +59,7 @@
 <script>
 import { getSuggestion } from '@/api/search'
 import { setItem, getItem } from '@/utils/localStorage'
+import { debounce } from 'lodash'
 export default {
   name: 'SearchPage',
   data () {
@@ -71,14 +72,14 @@ export default {
   },
   methods: {
     // 获取联想词
-    async onInput () {
+    onInput: debounce(async function () {
       if (!this.value) {
         return
       }
       const res = await getSuggestion(this.value.trim())
       console.log(res.data)
       this.suggestions = res.data.data.options
-    },
+    }, 300),
 
     // 高亮关键词
     HigthLigth (suggestion) {
