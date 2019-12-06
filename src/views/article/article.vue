@@ -260,7 +260,9 @@ export default {
       console.log(res)
       if (res.status === 201) {
         this.$toast({ type: 'success', message: '发布成功' })
-        this.loadArticleComments()
+        // this.loadArticleComments()
+        // 直接追加到数组，不需要重新加载评论列表
+        this.comments.unshift(res.data.data.new_obj)
         this.commentText = ''
       } else {
         this.$toast({ type: 'fail', message: '发布失败' })
@@ -277,6 +279,7 @@ export default {
       console.log(res)
       if (res.status === 201) {
         if (res.status === 201) {
+          this.CommentReply.unshift(res.data.data.new_obj)
           this.$toast({ type: 'success', message: '发布成功' })
           this.commentReplyText = ''
         } else {
@@ -297,7 +300,7 @@ export default {
         console.log(res)
       }
       this.article.is_followed = !this.article.is_followed
-      this.$toast('操作成功')
+      this.$toast({ type: 'success', message: '操作成功' })
     },
 
     // 点赞,取消点赞文章
@@ -313,7 +316,7 @@ export default {
         console.log(res)
         this.article.attitude = 1
       }
-      this.$toast('操作成功')
+      this.$toast({ type: 'success', message: '操作成功' })
     },
 
     // 不喜欢,取消不喜欢文章
@@ -329,7 +332,7 @@ export default {
         console.log(res)
         this.article.attitude = 0
       }
-      this.$toast('操作成功')
+      this.$toast({ type: 'success', message: '操作成功' })
     },
 
     // 点赞,取消点赞评论
@@ -344,7 +347,7 @@ export default {
         console.log(res)
       }
       comment.is_liking = !comment.is_liking
-      this.$toast('操作成功')
+      this.$toast({ type: 'success', message: '操作成功' })
     },
 
     // 点赞,取消点赞评论回复
@@ -359,7 +362,7 @@ export default {
         console.log(res)
       }
       comment.is_liking = !comment.is_liking
-      this.$toast('操作成功')
+      this.$toast({ type: 'success', message: '操作成功' })
     }
   },
   created () {
