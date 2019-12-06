@@ -8,6 +8,7 @@ import Search from '@/views/search/search'
 import SearchResults from '@/views/search/SearchResults'
 import Article from '@/views/article/article'
 import UserEdit from '@/views/user/UserEdit'
+import Robot from '@/views/robot/robot'
 
 // 二级路由组件
 import Home from '@/views/home/home'
@@ -42,6 +43,11 @@ const routes = [
     // 用户信息修改
     path: '/my',
     component: UserEdit
+  },
+  {
+    // 小智
+    path: '/chat',
+    component: Robot
   },
   {
     path: '',
