@@ -86,7 +86,12 @@
             </span>
           </div>
         </div>
-        <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
+        <van-icon
+          :name="comment.is_liking?'like':'like-o'"
+          size="16px"
+          color="red"
+          @click="onCommentLike(comment)"
+        />
       </div>
     </van-list>
 
@@ -165,7 +170,12 @@ import {
   addDislike,
   deleteDislike
 } from '@/api/articles'
-import { getComments, addComments } from '@/api/comment'
+import {
+  getComments,
+  addComments,
+  addCommentLike,
+  addCommentDislike
+} from '@/api/comment'
 import { followUser, unfollowUser } from '@/api/user'
 import '@/utils/data'
 export default {
@@ -314,6 +324,21 @@ export default {
         console.log(res)
         this.article.attitude = 0
       }
+      this.$toast('操作成功')
+    },
+
+    // 点赞,取消点赞评论
+    async onCommentLike (comment) {
+      // 点赞状态,请求取消点赞
+      if (comment.is_liking) {
+        const res = await addCommentDislike(comment.com_id.toString())
+        console.log(res)
+      } else {
+        // 未点赞状态,请求点赞
+        const res = await addCommentLike(comment.com_id.toString())
+        console.log(res)
+      }
+      comment.is_liking = !comment.is_liking
       this.$toast('操作成功')
     }
   },

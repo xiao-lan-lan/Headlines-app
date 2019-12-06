@@ -17,3 +17,22 @@ export function addComments (data) {
     data
   })
 }
+
+// 对评论点赞
+export function addCommentLike (commentId) {
+  return request({
+    url: '/app/v1_0/comment/likings',
+    method: 'POST',
+    data: {
+      target: commentId
+    }
+  })
+}
+
+// 取消对评论点赞
+export function addCommentDislike (commentId) {
+  return request({
+    url: `/app/v1_0/comment/likings/${commentId}`,
+    method: 'DELETE'
+  })
+}
