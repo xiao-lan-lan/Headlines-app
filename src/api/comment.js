@@ -18,7 +18,7 @@ export function addComments (data) {
   })
 }
 
-// 对评论点赞
+// 对评论或评论回复点赞
 export function addCommentLike (commentId) {
   return request({
     url: '/app/v1_0/comment/likings',
@@ -29,7 +29,7 @@ export function addCommentLike (commentId) {
   })
 }
 
-// 取消对评论点赞
+// 取消对评论或评论回复点赞
 export function addCommentDislike (commentId) {
   return request({
     url: `/app/v1_0/comment/likings/${commentId}`,

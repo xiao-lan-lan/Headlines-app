@@ -117,7 +117,7 @@
             <span style="color:grey">{{currentcomment.pubdate | relativeTime}}</span>
           </div>
         </div>
-        <van-icon :name="currentcomment.is_liking?'like':'like-o'" size="14px" />
+        <van-icon :name="currentcomment.is_liking?'like':'like-o'" size="14px" color="red" />
       </div>
 
       <van-divider />
@@ -131,7 +131,12 @@
             <span style="color:grey">{{comment.pubdate | relativeTime}}</span>
           </div>
         </div>
-        <van-icon :name="comment.is_liking?'like':'like-o'" size="14px" />
+        <van-icon
+          :name="comment.is_liking?'like':'like-o'"
+          size="16px"
+          color="red"
+          @click="onCommentReplyLike(comment)"
+        />
       </div>
 
       <!-- 底部发表回复 -->
@@ -187,7 +192,7 @@ export default {
       article: {}, // 文章详情
       comments: [], // 文章评论
       isCommentShow: false, // 评论弹窗
-      CommentReply: {}, // 评论回复
+      CommentReply: [], // 评论回复
       totalComment: 0, // 评论回复数
       currentcomment: {}, // 当前评论
       loading: false, // 加载转圈
@@ -329,6 +334,21 @@ export default {
 
     // 点赞,取消点赞评论
     async onCommentLike (comment) {
+      // 点赞状态,请求取消点赞
+      if (comment.is_liking) {
+        const res = await addCommentDislike(comment.com_id.toString())
+        console.log(res)
+      } else {
+        // 未点赞状态,请求点赞
+        const res = await addCommentLike(comment.com_id.toString())
+        console.log(res)
+      }
+      comment.is_liking = !comment.is_liking
+      this.$toast('操作成功')
+    },
+
+    // 点赞,取消点赞评论回复
+    async onCommentReplyLike (comment) {
       // 点赞状态,请求取消点赞
       if (comment.is_liking) {
         const res = await addCommentDislike(comment.com_id.toString())
