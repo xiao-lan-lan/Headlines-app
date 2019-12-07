@@ -53,9 +53,19 @@ export function followUser (userId) {
   })
 }
 
+// 取消关注用户
 export function unfollowUser (userId) {
   return request({
     url: `/app/v1_0/user/followings/${userId}`,
     method: 'DELETE'
+  })
+}
+
+// 修改用户头像
+export function editUserImg (data) {
+  return request({
+    url: '/app/v1_0/user/photo',
+    method: 'PATCH',
+    data
   })
 }
