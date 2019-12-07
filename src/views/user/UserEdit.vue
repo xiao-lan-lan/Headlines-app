@@ -6,7 +6,8 @@
     <!-- 编辑项 -->
     <van-cell-group>
       <van-cell title="头像" is-link value="内容">
-        <van-image slot="default" width="40" height="40" :src="user.photo" />
+        <van-image slot="default" width="40" height="40" :src="user.photo" @click="$refs.file.click()"/>
+        <input type="file" hidden ref="file" @change="onImgPreview">
       </van-cell>
       <van-cell title="昵称" is-link value="内容" @click="isNameShow=true">
         <span slot="default">{{user.name}}</span>
@@ -93,6 +94,11 @@ export default {
       this.isBirthdayShow = false
       console.log(value)
       this.user.birthday = moment(value).format('YYYY-MM-DD')
+    },
+
+    // 头像预览
+    onImgPreview () {
+      this.user.photo = URL.createObjectURL(this.$refs.file.files[0])
     },
 
     // 修改用户资料
