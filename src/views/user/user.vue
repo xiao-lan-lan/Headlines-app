@@ -54,6 +54,7 @@
       <van-cell title="用户反馈" is-link />
       <van-cell title="小智同学" is-link to="/chat" />
       <van-cell title="系统设置" is-link />
+      <van-cell title="退出登录" is-link @click="onLogout"/>
     </van-cell-group>
   </div>
 </template>
@@ -68,10 +69,25 @@ export default {
     }
   },
   methods: {
+
+    // 获取用户数据
     async loadUserData () {
       const res = await getUserData()
       console.log(res.data)
       this.UserData = res.data.data
+    },
+
+    // 退出登录
+    onLogout () {
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '确定要退出么？'
+      }).then(() => {
+        // on confirm
+        this.$store.commit('changeTokenObj', null)
+      }).catch(() => {
+        // on cancel
+      })
     }
   },
   created () {
