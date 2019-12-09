@@ -75,7 +75,11 @@ export default {
         console.log(res)
         this.$store.commit('changeTokenObj', res.data.data)
         this.$toast.success('登录成功')
-        this.$router.push('/')
+        if (!this.$route.query.redirect) {
+          this.$router.push('/')
+        } else {
+          this.$router.push(this.$route.query.redirect)
+        }
       } catch (error) {
         this.$toast.fail('登录失败')
       }

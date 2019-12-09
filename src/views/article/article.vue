@@ -1,7 +1,7 @@
 <template>
   <div class="articles">
     <!-- 顶部导航标题 -->
-    <van-nav-bar title="文章详情" left-arrow @click-left="$router.back()" />
+    <van-nav-bar title="文章详情" left-arrow @click-left="$router.push('/')" />
 
     <!-- 加载转圈圈 -->
     <van-loading

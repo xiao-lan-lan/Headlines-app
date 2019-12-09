@@ -5,7 +5,7 @@
       title="个人信息"
       left-arrow
       right-text="保存"
-      @click-left="$router.back()"
+      @click-left="$router.push('/user')"
       @click-right="onEditUser"
     />
 

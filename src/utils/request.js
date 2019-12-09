@@ -40,7 +40,7 @@ request.interceptors.response.use(res => {
   // 如果响应码是401,说明token有问题,那判断一下是否有refrensh-token,如有拿去请求新的token,重新存到容器里,再把原请求发出去;没有回登录页
   if (err.response.status === 401) {
     if (!store.state.TokenObj.refresh_token) {
-      router.push('/login')
+      router.push('/login?redirect=' + router.currentRoute.fullPath)
       return
     }
     try {
@@ -52,13 +52,14 @@ request.interceptors.response.use(res => {
         }
       })
       console.log(res)
+      console.log(router)
       store.commit('changeTokenObj', {
         token: res.data.data.token,
         refresh_token: store.state.TokenObj.refresh_token
       })
       return request(err.config)
     } catch (error) {
-      router.push('/login')
+      router.push('/login?redirect=' + router.currentRoute.fullPath)
     }
   }
   return Promise.reject(err)
