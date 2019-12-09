@@ -37,7 +37,7 @@ export default {
     return {
       userText: '', // 输入内容
       socket: null, // 通信对象
-      messageList: getItem('chat') || []// 消息列表
+      messageList: getItem('chat') || [] // 消息列表
     }
   },
   methods: {
@@ -70,11 +70,18 @@ export default {
   },
   watch: {
     messageList: function (newval, oldval) {
+      // 聊天有变化，存入本地
       setItem('chat', newval)
-      console.dir(this.$refs.chat)
+
+      // 设置卷去距离
       const chat = this.$refs.chat
+      console.log(chat)
+
+      console.log(chat.scrollTop = 200)
+      chat.scrollTop = chat.scrollHeight
+      console.log(chat.scrollTop)
       this.$nextTick(() => {
-        chat.scrollTop = chat.scrollHeight
+
       })
     }
   }
