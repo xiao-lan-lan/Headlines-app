@@ -10,6 +10,11 @@ import '@/styles/index.less'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
 import zhCN from 'vee-validate/dist/locale/zh_CN' // 加载验证插件的语言包
 import * as rules from 'vee-validate/dist/rules'
+
+// 移动端300毫秒延迟
+import fastClick from 'fastclick'
+fastClick.attach(document.body)
+
 // 配置使用中文语言
 for (let rule in rules) {
   extend(rule, {
