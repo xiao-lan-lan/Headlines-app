@@ -1,7 +1,9 @@
 <template>
   <div class="tabbar">
     <!-- 二级路由出口 -->
-    <router-view/>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <van-tabbar v-model="active" route>
       <van-tabbar-item to="/" icon="wap-home-o">主页</van-tabbar-item>
       <van-tabbar-item to="/qa" icon="more-o">问答</van-tabbar-item>
