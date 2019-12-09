@@ -4,15 +4,19 @@
     <van-nav-bar title="小智同学" left-arrow @click-left="$router.back()" fixed />
 
     <!-- 聊天列表 -->
-    <div class="chat">
-      <div :class="{l:!message.isMe,r:message.isMe}" v-for="(message,index) in messageList" :key="index">
+    <div class="chat" ref="chat">
+      <div
+        :class="{l:!message.isMe,r:message.isMe}"
+        v-for="(message,index) in messageList"
+        :key="index"
+      >
         <van-image round width="40px" height="40px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
         <span>{{message.msg}}</span>
       </div>
       <!-- <div class="r">
         <span>嘿嘿嘿</span>
         <van-image round width="40px" height="40px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-      </div> -->
+      </div>-->
     </div>
 
     <!-- 底部发送消息 -->
@@ -60,9 +64,18 @@ export default {
     })
     // this.socket = socket
   },
+  mounted () {
+    const chat = this.$refs.chat
+    chat.scrollTop = chat.scrollHeight
+  },
   watch: {
     messageList: function (newval, oldval) {
       setItem('chat', newval)
+      console.dir(this.$refs.chat)
+      const chat = this.$refs.chat
+      this.$nextTick(() => {
+        chat.scrollTop = chat.scrollHeight
+      })
     }
   }
 }
@@ -72,12 +85,11 @@ export default {
 .robot {
   position: absolute;
   background-color: #f5f5f6;
-  height: 100%;
   left: 0;
   right: 0;
   .chat {
     margin-top: 46px;
-    padding: 15px;
+    padding: 15px 15px 50px 15px;
     span {
       padding: 8px;
       background-color: #fff;
@@ -98,7 +110,7 @@ export default {
       span {
         margin-right: 8px;
         background-color: #07c160;
-        color: #fff
+        color: #fff;
       }
     }
   }
