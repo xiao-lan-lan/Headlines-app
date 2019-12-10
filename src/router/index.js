@@ -2,19 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 一级组件
-import Login from '@/views/login/login'
-import Layout from '@/views/layout'
-import Search from '@/views/search/search'
-import SearchResults from '@/views/search/SearchResults'
-import Article from '@/views/article/article'
-import UserEdit from '@/views/user/UserEdit'
-import Robot from '@/views/robot/robot'
+const Login = () => import('@/views/login/login')
+const Layout = () => import('@/views/layout')
+const Search = () => import('@/views/search/search')
+const SearchResults = () => import('@/views/search/SearchResults')
+const Article = () => import('@/views/article/article')
+const UserEdit = () => import('@/views/user/UserEdit')
+const Robot = () => import('@/views/robot/robot')
 
 // 二级路由组件
-import Home from '@/views/home/home'
-import QA from '@/views/QA'
-import Video from '@/views/videos'
-import User from '@/views/user/user'
+const Home = () => import('@/views/home/home')
+const QA = () => import('@/views/QA')
+const Video = () => import('@/views/videos')
+const User = () => import('@/views/user/user')
 
 Vue.use(VueRouter)
 
