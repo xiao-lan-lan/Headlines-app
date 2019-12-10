@@ -6,7 +6,7 @@
     </van-nav-bar>
 
     <!-- 频道标签 -->
-    <van-tabs v-model="active" color="#3296fa" title-active-color="#3296fa">
+    <van-tabs v-model="active" color="#3296fa" title-active-color="#3296fa" swipeable>
       <!-- 右侧面包按钮 -->
       <van-icon name="wap-nav" slot="nav-right" size="30px" @click="isChannelShow=true" />
 

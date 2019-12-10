@@ -92,12 +92,16 @@ export default {
   },
   created () {
     this.loadUserData()
+    this.$store.commit('changeUserPhoto', this.UserData.photo)
   }
 }
 </script>
 
 <style lang="less" scoped>
 .user {
+  .van-grid {
+    flex-wrap: nowrap
+  }
   .nologin {
     display: flex;
     justify-content: center;

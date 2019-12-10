@@ -1,7 +1,7 @@
 <template>
   <div class="articles">
     <!-- 顶部导航标题 -->
-    <van-nav-bar title="文章详情" left-arrow @click-left="$router.push('/')" fixed/>
+    <van-nav-bar title="文章详情" left-arrow @click-left="$router.push('/')" :fixed="true"/>
 
     <!-- 加载转圈圈 -->
     <van-loading
@@ -380,9 +380,14 @@ export default {
 
 <style lang="less" scoped>
 .articles {
+  .van-nav-bar {
+    width: 100%;
+  }
   .article {
     padding: 10px;
     margin-bottom: 30px;
+    margin-top: 46px;
+    overflow: auto;
     h5 {
       margin: 10px 0 30px 0;
     }

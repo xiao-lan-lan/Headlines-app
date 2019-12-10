@@ -10,7 +10,12 @@
         v-for="(message,index) in messageList"
         :key="index"
       >
-        <van-image round width="40px" height="40px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <van-image
+          round
+          width="40px"
+          height="40px"
+          :src="message.isMe?$store.state.userphoto:'https://img.yzcdn.cn/vant/cat.jpeg'"
+        />
         <span>{{message.msg}}</span>
       </div>
       <!-- <div class="r">
@@ -66,7 +71,7 @@ export default {
   },
   mounted () {
     const chat = this.$refs.chat
-    chat.scrollTop = chat.scrollHeight
+    document.documentElement.scrollTop = chat.scrollHeight
   },
   watch: {
     messageList: function (newval, oldval) {
@@ -75,13 +80,10 @@ export default {
 
       // 设置卷去距离
       const chat = this.$refs.chat
-      console.log(chat)
-
-      console.log(chat.scrollTop = 200)
-      chat.scrollTop = chat.scrollHeight
-      console.log(chat.scrollTop)
       this.$nextTick(() => {
-
+        document.documentElement.scrollTop = chat.scrollHeight
+        console.log(document.documentElement.scrollTop)
+        console.log(chat.scrollHeight)
       })
     }
   }

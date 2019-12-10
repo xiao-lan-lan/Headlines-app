@@ -6,12 +6,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    TokenObj: getItem('token')
+    TokenObj: getItem('token'),
+    userphoto: 'https://img.yzcdn.cn/vant/cat.jpeg'
   },
   mutations: {
     changeTokenObj (state, token) {
       state.TokenObj = token
       setItem('token', state.TokenObj)
+    },
+    changeUserPhoto (state, data) {
+      state.userphoto = data
     }
   },
   actions: {
